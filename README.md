@@ -3,7 +3,10 @@ Automatically manage hlsearch setting.
 
 ## Preview
 
-Enables the `hlsearch` option after the search started. Disables the `hlsearch` when cursor moved.
+Enables the `hlsearch` option when you start searching e.g. with key `/`. Disables the `hlsearch`
+when you move the cursor, so you don't have to think about enabling/disabling it manually.
+
+https://user-images.githubusercontent.com/61456651/210617006-8d1dc836-695f-44bd-b62f-63b1dea56f09.mp4
 
 ## Getting Started
 
@@ -21,7 +24,7 @@ use("asiryk/auto-hlsearch.nvim")
 
 ### Usage
 
-In order to use the plugin it is required to call `setup()`. The following line will use default settings:
+In order to use the plugin, it is required to call `setup()`. The following line will use default settings:
 
 ```lua
 require("auto-hlsearch").setup()
