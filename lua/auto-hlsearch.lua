@@ -21,7 +21,11 @@ local function remap_keys(keys)
     end
   end
 
-  local keymaps = vim.api.nvim_get_keymap("n")
+  local keymaps = vim.tbl_filter(
+    function(t) return vim.tbl_contains(keys, t.lhs) end,
+    vim.api.nvim_get_keymap("n")
+  )
+
   for _, lhs in ipairs(keys) do
     local keymap = vim.tbl_filter(function(t) return t.lhs == lhs end, keymaps)[1]
     set(lhs, keymap)
