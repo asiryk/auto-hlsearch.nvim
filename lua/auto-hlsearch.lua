@@ -77,4 +77,3 @@ vim.api.nvim_create_user_command("AutoHlsearch", function()
 end, {})
 
 return M
-
