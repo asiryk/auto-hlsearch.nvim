@@ -1,17 +1,14 @@
-local config = {
+local defaults = {
   remap_keys = { "/", "?", "*", "#" },
-  clear_register = false,
 }
 
-local function clear_register() vim.cmd(":let @/ = ''") end
-
-local function set_keymaps(search_keys)
-  for _, key in ipairs(search_keys) do
+local function set_keymaps(remap_keys)
+  for _, key in ipairs(remap_keys) do
     vim.keymap.set("n", key, string.format("%s%s", ":AutoHlsearch<cr>", key))
   end
 end
 
-local function init(search_keys)
+local function init(config)
   local group = vim.api.nvim_create_augroup("auto-hlsearch", {})
   local namespace = vim.api.nvim_create_namespace("auto-hlsearch")
   local autocmd_id = nil
@@ -23,9 +20,9 @@ local function init(search_keys)
   end
 
   local function deactivate()
-    vim.cmd(":noh<CR>")
+    -- need to schedule, since noh doesn't work with autocmd. :h noh
+    vim.schedule(function() vim.cmd(":noh") end)
     clear_subscriptions()
-    if config.clear_register then clear_register() end
   end
 
   return function()
@@ -38,7 +35,7 @@ local function init(search_keys)
       group = group,
       callback = function()
         -- TODO - ignore <CR> only for the first time. Next presses should disable highlight
-        local ignore_keys = vim.list_extend({ "<CR>", ":", "n", "N" }, search_keys)
+        local ignore_keys = vim.list_extend({ "<CR>", ":", "n", "N" }, config.remap_keys)
         if not vim.tbl_contains(ignore_keys, last_key) then deactivate() end
       end,
     })
@@ -54,14 +51,23 @@ local function init(search_keys)
   end
 end
 
-return {
-  setup = function(opts)
-    if not opts then return end
-    if vim.tbl_islist(opts.remap_keys) then config.remap_keys = opts.remap_keys end
-    if opts.clear_register ~= nil then config.clear_register = opts.clear_register end
+local function apply_user_config(user_config)
+  local config = vim.tbl_deep_extend("force", {}, defaults)
 
-    set_keymaps(opts.search_keys)
-    local activate = init(config.remap_keys)
+  if user_config then
+    if vim.tbl_islist(user_config.remap_keys) then
+      config.remap_keys = user_config.remap_keys
+    end
+  end
+
+  return config
+end
+
+return {
+  setup = function(user_config)
+    local config = apply_user_config(user_config)
+    set_keymaps(config.remap_keys)
+    local activate = init(config)
     vim.api.nvim_create_user_command("AutoHlsearch", function() activate() end, {})
   end,
 }
