@@ -2,10 +2,35 @@ local defaults = {
   remap_keys = { "/", "?", "*", "#" },
 }
 
-local function set_keymaps(remap_keys)
-  for _, key in ipairs(remap_keys) do
-    vim.keymap.set("n", key, string.format("%s%s", ":AutoHlsearch<cr>", key))
+local function remap_search_keys(keys)
+  for _, key in ipairs(keys) do
+    vim.keymap.set("n", key, string.format("%s%s", ":AutoHlsearch<CR>", key))
   end
+end
+
+-- Keep user keymaps for n and N keys
+local function remap_n_keys()
+  local function set(user_map, key)
+    local cmd = ":AutoHlsearch<CR>"
+    if user_map then
+      local opts = {
+        expr = user_map.expr,
+        noremap = user_map.noremap,
+        nowait = user_map.nowait,
+        script = user_map.script,
+        silent = user_map.silent,
+      }
+      vim.api.nvim_set_keymap("n", key, string.format("%s%s", cmd, user_map.rhs), opts)
+    else
+      vim.keymap.set("n", key, string.format("%sn", cmd))
+    end
+  end
+
+  local keymaps = vim.api.nvim_get_keymap("n")
+  local n_map = vim.tbl_filter(function(t) return t.lhs == "n" end, keymaps)[1]
+  local N_map = vim.tbl_filter(function(t) return t.lhs == "N" end, keymaps)[1]
+  set(n_map, "n")
+  set(N_map, "N")
 end
 
 local function init(config)
@@ -26,9 +51,9 @@ local function init(config)
   end
 
   return function()
-    -- if switched from one type of search to another e.g. / -> *
-    -- it is required to remove previous subscription
-    if autocmd_id then clear_subscriptions() end
+    -- There is no need to activate AutoHlsearch again
+    -- if subscription is still present
+    if autocmd_id then return end
 
     local last_key = nil
     autocmd_id = vim.api.nvim_create_autocmd("CursorMoved", {
@@ -65,9 +90,11 @@ end
 
 return {
   setup = function(user_config)
+    vim.cmd("set hlsearch") -- enable hlsearch in case it's disabled in user's config
     local config = apply_user_config(user_config)
-    set_keymaps(config.remap_keys)
     local activate = init(config)
     vim.api.nvim_create_user_command("AutoHlsearch", function() activate() end, {})
+    remap_search_keys(config.remap_keys)
+    remap_n_keys()
   end,
 }
