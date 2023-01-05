@@ -36,6 +36,7 @@ local function init(config)
   local group = vim.api.nvim_create_augroup("auto-hlsearch", {})
   local namespace = vim.api.nvim_create_namespace("auto-hlsearch")
   local autocmd_id = nil
+  local is_plugin_disabled = false
 
   local function clear_subscriptions()
     vim.on_key(nil, namespace)
@@ -44,13 +45,15 @@ local function init(config)
   end
 
   local function deactivate()
+    if is_plugin_disabled then return end
+
     -- need to schedule, since noh doesn't work with autocmd. :h noh
     vim.schedule(function() vim.cmd(":noh") end)
     clear_subscriptions()
   end
 
   local function activate()
-    -- There is no need to activate AutoHlsearch again
+    -- there is no need to activate :AutoHlsearch again
     -- if subscription is still present
     if autocmd_id then return end
     vim.cmd("set hlsearch")
@@ -75,7 +78,11 @@ local function init(config)
     end, namespace)
   end
 
-  return activate
+  local function enable_plugin() is_plugin_disabled = false end
+
+  local function disable_plugin() is_plugin_disabled = true end
+
+  return activate, enable_plugin, disable_plugin
 end
 
 local function apply_user_config(user_config)
@@ -93,8 +100,10 @@ end
 return {
   setup = function(user_config)
     local config = apply_user_config(user_config)
-    local activate = init(config)
+    local activate, enable, disable = init(config)
     vim.api.nvim_create_user_command("AutoHlsearch", function() activate() end, {})
+    vim.api.nvim_create_user_command("AutoHlsearchEnable", function() enable() end, {})
+    vim.api.nvim_create_user_command("AutoHlsearchDisable", function() disable() end, {})
     remap_keys(vim.list_extend({ "n", "N" }, config.remap_keys))
   end,
 }
