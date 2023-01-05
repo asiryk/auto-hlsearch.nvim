@@ -40,4 +40,4 @@ require("auto-hlsearch").setup({
 
 The plugin introduces a user command `:AutoHlsearch` which would be prepended to the provided `remap_keys`.
 
-For more information reed [help](./doc/auto-hlsearch.txt) `:h auto-hlsearch.nvim`.
+For more information read [help](./doc/auto-hlsearch.txt) `:h auto-hlsearch.nvim`.
