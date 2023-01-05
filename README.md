@@ -3,10 +3,12 @@ Automatically manage hlsearch setting.
 
 ## Preview
 
-Enables the `hlsearch` option when you start searching e.g. with key `/`. Disables the `hlsearch`
+Activates the `hlsearch` option when you start searching e.g. with key `/`. Deactivates the `hlsearch`
 when you move the cursor, so you don't have to think about enabling/disabling it manually.
 
 https://user-images.githubusercontent.com/61456651/210617006-8d1dc836-695f-44bd-b62f-63b1dea56f09.mp4
+
+> Note: it is possible to turn off the plugin with `:AutoHlsearchDisable` and turn on with `:AutoHlsearchEnable` commands
 
 ## Getting Started
 
