@@ -13,11 +13,11 @@ INTRODUCTION                                        *auto-hlsearch-introduction*
 |auto-hlsearch.nvim| is a plugin that automatically manages 'hlsearch' setting.
 
 It introduces a user command |:AutoHlsearch| that activates the plugin i.e.
-enables 'hlsearch' option and starts listening to |CursorMoved| |autocmd| and
-|vim.on_key()| function. The search navigation is ignored, so the |n| and |N| keys
-do not deactivate the plugin. But once any other kind of cursor move is
-detected, the 'hlsearch' will be turned off with |:noh| command and listeners
-removed.
+enables 'hlsearch' option and starts listening to |CursorMoved|, |InsertEnter|
+|autocmd|s and |vim.on_key()| function. The search navigation is ignored, so the
+|n| and |N| keys do not deactivate the plugin. But once any other kind of cursor
+move is detected, the 'hlsearch' will be turned off with |:noh| command and
+listeners removed.
 
 The additional |vim.on_key()| subscription is required in order to detect keys
 that don't deactivate the plugin in |CursorMoved| |autocmd|.
@@ -36,9 +36,14 @@ Calling setup with no arguments will use the default settings. You can pass a
 table with the settings you want to override. The defaults are the following:
 >
 		       require("auto-hlsearch").setup({
-			 remap_keys = { "/", "?", "*", "#" },
+		         remap_keys = { "/", "?", "*", "#" },
 		       })
 <
+
+NOTE: Make sure you set up the plugin after your configuration since you
+might override the keybindings. In turn, auto-hlsearch doesn't override the
+keybindings but extends them.
+
 The plugin introduces following commands:
 
   *:AutoHlsearch*
