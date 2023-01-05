@@ -35,13 +35,15 @@ end
 local function init(config)
   local group = vim.api.nvim_create_augroup("auto-hlsearch", {})
   local namespace = vim.api.nvim_create_namespace("auto-hlsearch")
-  local autocmd_id = nil
+  local autocmd_ids = {}
   local is_plugin_disabled = false
 
   local function clear_subscriptions()
     vim.on_key(nil, namespace)
-    vim.api.nvim_del_autocmd(autocmd_id)
-    autocmd_id = nil
+    for _, id in pairs(autocmd_ids) do
+      vim.api.nvim_del_autocmd(id)
+    end
+    autocmd_ids = {}
   end
 
   local function deactivate()
@@ -54,19 +56,24 @@ local function init(config)
 
   local function activate()
     -- there is no need to activate :AutoHlsearch again
-    -- if subscription is still present
-    if autocmd_id then return end
+    -- if the subscriptions are still present
+    if #autocmd_ids ~= 0 then return end
     vim.cmd("set hlsearch")
 
     local last_key = nil
-    autocmd_id = vim.api.nvim_create_autocmd("CursorMoved", {
+    table.insert(autocmd_ids, vim.api.nvim_create_autocmd("CursorMoved", {
       group = group,
       callback = function()
         -- TODO - ignore <CR> only for the first time. Next presses should disable highlight
         local ignore_keys = vim.list_extend({ "<CR>", ":", "n", "N" }, config.remap_keys)
         if not vim.tbl_contains(ignore_keys, last_key) then deactivate() end
       end,
-    })
+    }))
+
+    table.insert(autocmd_ids, vim.api.nvim_create_autocmd("InsertEnter", {
+      group = group,
+      callback = function() deactivate() end,
+    }))
 
     -- the on_key subscription is required in order to know
     -- the character which triggered "CursorMoved" autocmd
