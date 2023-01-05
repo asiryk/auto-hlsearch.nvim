@@ -12,7 +12,7 @@ INTRODUCTION                                        *auto-hlsearch-introduction*
 
 |auto-hlsearch.nvim| is a plugin that automatically manages 'hlsearch' setting.
 
-It introduces a user command *:AutoHlsearch* that activates the plugin i.e.
+It introduces a user command |:AutoHlsearch| that activates the plugin i.e.
 enables 'hlsearch' option and starts listening to |CursorMoved| |autocmd| and
 |vim.on_key()| function. The search navigation is ignored, so the |n| and |N| keys
 do not deactivate the plugin. But once any other kind of cursor move is
@@ -39,6 +39,20 @@ table with the settings you want to override. The defaults are the following:
 			 remap_keys = { "/", "?", "*", "#" },
 		       })
 <
+The plugin introduces following commands:
+
+  *:AutoHlsearch*
+    Activate the 'hlsearch' along with listeners that turn it off when you
+    move the cursor.
+
+  *:AutoHlsearchDisable*
+    After this command is called, the plugin will stop clearing the highlight,
+    i.e. will not call |:noh|. It can be enabled again by |:AutoHlsearchEnable|.
+
+  *:AutoHlsearchEnable*
+    Enables the plugin, so it starts calling |:noh| automatically again if it
+    was disabled by |:AutoHlsearchDisable|
+
 ==============================================================================
 
 CONFIGURATION                                      *auto-hlsearch-configuration*
