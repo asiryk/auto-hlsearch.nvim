@@ -36,7 +36,7 @@ The default configuration options:
 
 ```lua
 require("auto-hlsearch").setup({
-  remap_keys = { "/", "?", "*", "#" },
+  remap_keys = { "/", "?", "*", "#", "n", "N" },
 })
 ```
 

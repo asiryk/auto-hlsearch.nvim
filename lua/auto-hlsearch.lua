@@ -1,5 +1,5 @@
 local defaults = {
-  remap_keys = { "/", "?", "*", "#" },
+  remap_keys = { "/", "?", "*", "#", "n", "N" },
 }
 
 -- Remap provided keys in order to use :AutoHlsearch command
@@ -111,6 +111,6 @@ return {
     vim.api.nvim_create_user_command("AutoHlsearch", function() activate() end, {})
     vim.api.nvim_create_user_command("AutoHlsearchEnable", function() enable() end, {})
     vim.api.nvim_create_user_command("AutoHlsearchDisable", function() disable() end, {})
-    remap_keys(vim.list_extend({ "n", "N" }, config.remap_keys))
+    remap_keys(config.remap_keys)
   end,
 }

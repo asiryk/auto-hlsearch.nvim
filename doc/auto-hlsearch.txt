@@ -36,7 +36,7 @@ Calling setup with no arguments will use the default settings. You can pass a
 table with the settings you want to override. The defaults are the following:
 >
 		       require("auto-hlsearch").setup({
-		         remap_keys = { "/", "?", "*", "#" },
+		         remap_keys = { "/", "?", "*", "#", "n", "N" },
 		       })
 <
 
@@ -65,9 +65,6 @@ CONFIGURATION                                      *auto-hlsearch-configuration*
   remap_keys ~
     Accepts a lua table with keys for which the |:AutoHlsearch| command would
     be prepended.
-
-    NOTE: the |n| and |N| keys are automatically added to this table, so
-    they always activate the plugin.
 
 
 
