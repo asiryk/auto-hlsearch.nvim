@@ -65,7 +65,7 @@ local function init(config)
       group = group,
       callback = function()
         -- TODO - ignore <CR> only for the first time. Next presses should disable highlight
-        local ignore_keys = vim.list_extend({ "<CR>", ":", "n", "N" }, config.remap_keys)
+        local ignore_keys = vim.list_extend({ "<CR>", ":", "*", "#", "n", "N" }, config.remap_keys)
         if not vim.tbl_contains(ignore_keys, last_key) then deactivate() end
       end,
     }))
