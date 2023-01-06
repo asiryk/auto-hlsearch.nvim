@@ -17,7 +17,7 @@ local function remap_keys(keys)
       }
       vim.api.nvim_set_keymap("n", lhs, string.format("%s%s", cmd, keymap.rhs), opts)
     else
-      vim.keymap.set("n", lhs, string.format("%s%s", cmd, lhs))
+      vim.keymap.set("n", lhs, string.format("%s%s", cmd, lhs), { silent = true })
     end
   end
 
@@ -104,13 +104,13 @@ local function apply_user_config(user_config)
   return config
 end
 
-function M.setup(user_config)
-  local config = apply_user_config(user_config)
-  M.activate, M.enable, M.disable = init(config)
-  vim.api.nvim_create_user_command("AutoHlsearch", function() M.activate() end, {})
-  vim.api.nvim_create_user_command("AutoHlsearchEnable", function() M.enable() end, {})
-  vim.api.nvim_create_user_command("AutoHlsearchDisable", function() M.disable() end, {})
-  remap_keys(config.remap_keys)
-end
-
-return M
+return {
+  setup = function(user_config)
+    local config = apply_user_config(user_config)
+    local activate, enable, disable = init(config)
+    vim.api.nvim_create_user_command("AutoHlsearch", function() activate() end, {})
+    vim.api.nvim_create_user_command("AutoHlsearchEnable", function() enable() end, {})
+    vim.api.nvim_create_user_command("AutoHlsearchDisable", function() disable() end, {})
+    remap_keys(config.remap_keys)
+  end,
+}
