@@ -49,8 +49,7 @@ local function init(config)
   local function deactivate()
     if is_plugin_disabled then return end
 
-    -- need to schedule, since noh doesn't work with autocmd. :h noh
-    vim.schedule(function() vim.o.hlsearch = false end)
+    vim.o.hlsearch = false
     clear_subscriptions()
   end
 
