@@ -50,7 +50,7 @@ local function init(config)
     if is_plugin_disabled then return end
 
     -- need to schedule, since noh doesn't work with autocmd. :h noh
-    vim.schedule(function() vim.cmd(":noh") end)
+    vim.schedule(function() vim.o.hlsearch = false end)
     clear_subscriptions()
   end
 
@@ -58,7 +58,7 @@ local function init(config)
     -- there is no need to activate :AutoHlsearch again
     -- if the subscriptions are still present
     if #autocmd_ids ~= 0 then return end
-    vim.cmd("set hlsearch")
+    vim.o.hlsearch = true
 
     local last_key = nil
     table.insert(autocmd_ids, vim.api.nvim_create_autocmd("CursorMoved", {
@@ -104,13 +104,13 @@ local function apply_user_config(user_config)
   return config
 end
 
-return {
-  setup = function(user_config)
-    local config = apply_user_config(user_config)
-    local activate, enable, disable = init(config)
-    vim.api.nvim_create_user_command("AutoHlsearch", function() activate() end, {})
-    vim.api.nvim_create_user_command("AutoHlsearchEnable", function() enable() end, {})
-    vim.api.nvim_create_user_command("AutoHlsearchDisable", function() disable() end, {})
-    remap_keys(config.remap_keys)
-  end,
-}
+function M.setup(user_config)
+  local config = apply_user_config(user_config)
+  M.activate, M.enable, M.disable = init(config)
+  vim.api.nvim_create_user_command("AutoHlsearch", function() M.activate() end, {})
+  vim.api.nvim_create_user_command("AutoHlsearchEnable", function() M.enable() end, {})
+  vim.api.nvim_create_user_command("AutoHlsearchDisable", function() M.disable() end, {})
+  remap_keys(config.remap_keys)
+end
+
+return M
