@@ -7,7 +7,7 @@ local defaults = {
 local function remap_keys(keys)
   local function set(lhs, keymap)
     local cmd = ":AutoHlsearch<CR>"
-    if keymap then
+    if keymap and keymap.rhs then
       local opts = {
         expr = keymap.expr,
         noremap = keymap.noremap,
