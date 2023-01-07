@@ -4,22 +4,36 @@ local defaults = {
   remap_keys = { "/", "?", "*", "#", "n", "N" },
 }
 
--- Remap provided keys in order to use :AutoHlsearch command
+-- Remap provided keys in order to use activate() function
 -- while keeping the user's keymap configuration
 local function remap_keys(keys)
   local function set(lhs, keymap)
-    local cmd = ":AutoHlsearch<CR>"
-    if keymap and keymap.rhs then
+    if keymap then
       local opts = {
-        expr = keymap.expr,
+        expr = true,
         noremap = keymap.noremap,
         nowait = keymap.nowait,
         script = keymap.script,
         silent = keymap.silent,
       }
-      vim.api.nvim_set_keymap("n", lhs, string.format("%s%s", cmd, keymap.rhs), opts)
+      -- We need to consider the remmaping when use expr options
+      if keymap.expr == 1 then
+        -- For vimscript function
+        if keymap.rhs then
+          vim.keymap.set("n", lhs, function () M.activate() return vim.api.nvim_eval(keymap.rhs) end , opts)
+
+        -- For lua function
+        elseif keymap.callback then
+          vim.keymap.set("n", lhs, keymap.callback, opts)
+        end
+
+      -- For not use expr options
+      else
+        vim.keymap.set("n", lhs, function () M.activate() return keymap.rhs end, opts)
+      end
+
     else
-      vim.keymap.set("n", lhs, string.format("%s%s", cmd, lhs), { silent = true })
+      vim.keymap.set("n", lhs, function() M.activate() return lhs end, { expr = true })
     end
   end
 
