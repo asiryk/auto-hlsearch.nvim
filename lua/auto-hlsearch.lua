@@ -1,3 +1,5 @@
+local M = {}
+
 local defaults = {
   remap_keys = { "/", "?", "*", "#", "n", "N" },
 }
@@ -111,14 +113,14 @@ local function apply_user_config(user_config)
   return config
 end
 
-return {
-  setup = function(user_config)
-    local config = apply_user_config(user_config)
-    local activate, enable, disable, toggle = init(config)
-    vim.api.nvim_create_user_command("AutoHlsearch", function() activate() end, {})
-    vim.api.nvim_create_user_command("AutoHlsearchEnable", function() enable() end, {})
-    vim.api.nvim_create_user_command("AutoHlsearchDisable", function() disable() end, {})
-    vim.api.nvim_create_user_command("AutoHlsearchToggle", function() toggle() end, {})
-    remap_keys(config.remap_keys)
-  end,
-}
+M.setup = function(user_config)
+  local config = apply_user_config(user_config)
+  M.activate, M.enable, M.disable, M.toggle = init(config)
+  vim.api.nvim_create_user_command("AutoHlsearch", function() M.activate() end, {})
+  vim.api.nvim_create_user_command("AutoHlsearchEnable", function() M.enable() end, {})
+  vim.api.nvim_create_user_command("AutoHlsearchDisable", function() M.disable() end, {})
+  vim.api.nvim_create_user_command("AutoHlsearchToggle", function() M.toggle() end, {})
+  remap_keys(config.remap_keys)
+end
+
+return M
