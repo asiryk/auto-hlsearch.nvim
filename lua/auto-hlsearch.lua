@@ -88,7 +88,15 @@ local function init(config)
 
   local function disable_plugin() is_plugin_disabled = true end
 
-  return activate, enable_plugin, disable_plugin
+  local function toggle_plugin()
+    if is_plugin_disabled then
+      enable_plugin()
+    else
+      disable_plugin()
+    end
+  end
+
+  return activate, enable_plugin, disable_plugin, toggle_plugin
 end
 
 local function apply_user_config(user_config)
@@ -106,10 +114,11 @@ end
 return {
   setup = function(user_config)
     local config = apply_user_config(user_config)
-    local activate, enable, disable = init(config)
+    local activate, enable, disable, toggle = init(config)
     vim.api.nvim_create_user_command("AutoHlsearch", function() activate() end, {})
     vim.api.nvim_create_user_command("AutoHlsearchEnable", function() enable() end, {})
     vim.api.nvim_create_user_command("AutoHlsearchDisable", function() disable() end, {})
+    vim.api.nvim_create_user_command("AutoHlsearchToggle", function() toggle() end, {})
     remap_keys(config.remap_keys)
   end,
 }
