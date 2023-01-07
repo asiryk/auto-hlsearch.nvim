@@ -58,6 +58,9 @@ The plugin introduces following commands:
     Enables the plugin, so it starts calling |:noh| automatically again if it
     was disabled by |:AutoHlsearchDisable|
 
+  *:AutoHlsearchToggle*
+    Toggles between |:AutoHlsearchEnable| and |:AutoHlsearchDisable|
+
 ==============================================================================
 
 CONFIGURATION                                      *auto-hlsearch-configuration*
