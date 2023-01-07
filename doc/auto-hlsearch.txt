@@ -49,17 +49,29 @@ The plugin introduces following commands:
   *:AutoHlsearch*
     Activate the 'hlsearch' along with listeners that turn it off when you
     move the cursor.
+>
+		       require("auto-hlsearch").activate()
+<
 
   *:AutoHlsearchDisable*
     After this command is called, the plugin will stop clearing the highlight,
     i.e. will not call |:noh|. It can be enabled again by |:AutoHlsearchEnable|.
+>
+		       require("auto-hlsearch").enable()
+<
 
   *:AutoHlsearchEnable*
     Enables the plugin, so it starts calling |:noh| automatically again if it
     was disabled by |:AutoHlsearchDisable|
+>
+		       require("auto-hlsearch").disable()
+<
 
   *:AutoHlsearchToggle*
     Toggles between |:AutoHlsearchEnable| and |:AutoHlsearchDisable|
+>
+		       require("auto-hlsearch").toggle()
+<
 
 ==============================================================================
 
