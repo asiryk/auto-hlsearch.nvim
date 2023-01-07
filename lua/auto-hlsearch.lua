@@ -17,7 +17,7 @@ local function remap_keys(keys)
       }
       vim.api.nvim_set_keymap("n", lhs, string.format("%s%s", cmd, keymap.rhs), opts)
     else
-      vim.keymap.set("n", lhs, string.format("%s%s", cmd, lhs))
+      vim.keymap.set("n", lhs, string.format("%s%s", cmd, lhs), { silent = true })
     end
   end
 
@@ -49,8 +49,7 @@ local function init(config)
   local function deactivate()
     if is_plugin_disabled then return end
 
-    -- need to schedule, since noh doesn't work with autocmd. :h noh
-    vim.schedule(function() vim.cmd(":noh") end)
+    vim.o.hlsearch = false
     clear_subscriptions()
   end
 
@@ -58,7 +57,7 @@ local function init(config)
     -- there is no need to activate :AutoHlsearch again
     -- if the subscriptions are still present
     if #autocmd_ids ~= 0 then return end
-    vim.cmd("set hlsearch")
+    vim.o.hlsearch = true
 
     local last_key = nil
     table.insert(autocmd_ids, vim.api.nvim_create_autocmd("CursorMoved", {
