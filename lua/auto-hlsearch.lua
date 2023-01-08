@@ -24,7 +24,7 @@ local function remap_keys(keys)
 
         -- For lua function
         elseif keymap.callback then
-          vim.keymap.set("n", lhs, keymap.callback, opts)
+          vim.keymap.set("n", lhs, function () M.activate() return keymap.callback() end, opts)
         end
 
       -- For not use expr options
