@@ -17,19 +17,18 @@ local function remap_keys(keys)
         silent = keymap.silent,
       }
       -- We need to consider the remmaping when use expr options
-      if keymap.expr == 1 then
+      -- For lua function
+      if keymap.callback then
+        vim.keymap.set("n", lhs, function () M.activate() return keymap.callback() end, opts)
+
+      elseif keymap.expr == 1 and keymap.rhs then
         -- For vimscript function
-        if keymap.rhs then
-          vim.keymap.set("n", lhs, function () M.activate() return vim.api.nvim_eval(keymap.rhs) end , opts)
+        vim.keymap.set("n", lhs, function () M.activate() return vim.api.nvim_eval(keymap.rhs) end , opts)
 
-        -- For lua function
-        elseif keymap.callback then
-          vim.keymap.set("n", lhs, function () M.activate() return keymap.callback() end, opts)
-        end
+      -- For vimscript function, not use expr options
+      elseif keymap.rhs then
+          vim.keymap.set("n", lhs, function () M.activate() return keymap.rhs end, opts)
 
-      -- For not use expr options
-      else
-        vim.keymap.set("n", lhs, function () M.activate() return keymap.rhs end, opts)
       end
 
     else
