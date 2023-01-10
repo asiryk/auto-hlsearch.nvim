@@ -25,7 +25,7 @@ local function remap_keys(keys)
         -- For vimscript function
         vim.keymap.set("n", lhs, function () M.activate() return vim.api.nvim_eval(keymap.rhs) end , opts)
 
-      -- For vimscript function, not use expr options
+        -- For vimscript function, not use expr options
       elseif keymap.rhs then
           vim.keymap.set("n", lhs, function () M.activate() return keymap.rhs end, opts)
 
@@ -79,7 +79,7 @@ local function init(config)
       group = group,
       callback = function()
         -- TODO - ignore <CR> only for the first time. Next presses should disable highlight
-        local ignore_keys = vim.list_extend({ "<CR>", ":", "*", "#", "n", "N" }, config.remap_keys)
+        local ignore_keys = vim.list_extend({ "<CR>", ":" }, config.remap_keys)
         if not vim.tbl_contains(ignore_keys, last_key) then deactivate() end
       end,
     }))
@@ -99,9 +99,15 @@ local function init(config)
     end, namespace)
   end
 
-  local function enable_plugin() is_plugin_disabled = false end
+  local function enable_plugin()
+    is_plugin_disabled = false
+    activate()
+  end
 
-  local function disable_plugin() is_plugin_disabled = true end
+  local function disable_plugin()
+    is_plugin_disabled = true
+    clear_subscriptions()
+  end
 
   local function toggle_plugin()
     if is_plugin_disabled then
