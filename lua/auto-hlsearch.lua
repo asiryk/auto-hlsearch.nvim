@@ -2,6 +2,7 @@ local M = {}
 
 local defaults = {
   remap_keys = { "/", "?", "*", "#", "n", "N" },
+  create_commands = true,
 }
 
 -- Remap provided keys in order to use activate() function
@@ -127,6 +128,9 @@ local function apply_user_config(user_config)
     if vim.tbl_islist(user_config.remap_keys) then
       config.remap_keys = user_config.remap_keys
     end
+    if type(user_config.create_commands) == "boolean" then
+      config.create_commands = user_config.create_commands
+    end
   end
 
   return config
@@ -135,10 +139,12 @@ end
 M.setup = function(user_config)
   local config = apply_user_config(user_config)
   M.activate, M.enable, M.disable, M.toggle = init(config)
-  vim.api.nvim_create_user_command("AutoHlsearch", function() M.activate() end, {})
-  vim.api.nvim_create_user_command("AutoHlsearchEnable", function() M.enable() end, {})
-  vim.api.nvim_create_user_command("AutoHlsearchDisable", function() M.disable() end, {})
-  vim.api.nvim_create_user_command("AutoHlsearchToggle", function() M.toggle() end, {})
+  if config.create_commands then
+    vim.api.nvim_create_user_command("AutoHlsearch", function() M.activate() end, {})
+    vim.api.nvim_create_user_command("AutoHlsearchEnable", function() M.enable() end, {})
+    vim.api.nvim_create_user_command("AutoHlsearchDisable", function() M.disable() end, {})
+    vim.api.nvim_create_user_command("AutoHlsearchToggle", function() M.toggle() end, {})
+  end
   remap_keys(config.remap_keys)
 end
 

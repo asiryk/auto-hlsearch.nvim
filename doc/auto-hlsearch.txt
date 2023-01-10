@@ -8,7 +8,7 @@ License: Apache-2.0
 
 ==============================================================================
 
-INTRODUCTION                                        *auto-hlsearch-introduction*
+INTRODUCTION                                      *auto-hlsearch-introduction*
 
 |auto-hlsearch.nvim| is a plugin that automatically manages 'hlsearch' setting.
 
@@ -26,7 +26,7 @@ The plugin extends user's keybindings in order to call |:AutoHlsearch| command.
 
 ==============================================================================
 
-USAGE                                                      *auto-hlsearch-usage*
+USAGE                                                    *auto-hlsearch-usage*
 
 In order to use the plugin, it is required to call `setup()`.
 >
@@ -37,6 +37,7 @@ table with the settings you want to override. The defaults are the following:
 >
 		       require("auto-hlsearch").setup({
 		         remap_keys = { "/", "?", "*", "#", "n", "N" },
+			 create_commands = true,
 		       })
 <
 
@@ -57,29 +58,37 @@ The plugin introduces following commands:
     After this command is called, the plugin will stop clearing the highlight,
     i.e. will not call |:noh|. It can be enabled again by |:AutoHlsearchEnable|.
 >
-		       require("auto-hlsearch").enable()
+		       require("auto-hlsearch").disable()
 <
 
   *:AutoHlsearchEnable*
     Enables the plugin, so it starts calling |:noh| automatically again if it
-    was disabled by |:AutoHlsearchDisable|
+    was disabled by |:AutoHlsearchDisable|.
 >
-		       require("auto-hlsearch").disable()
+		       require("auto-hlsearch").enable()
 <
 
   *:AutoHlsearchToggle*
-    Toggles between |:AutoHlsearchEnable| and |:AutoHlsearchDisable|
+    Toggles between |:AutoHlsearchEnable| and |:AutoHlsearchDisable|.
 >
 		       require("auto-hlsearch").toggle()
 <
 
 ==============================================================================
 
-CONFIGURATION                                      *auto-hlsearch-configuration*
+CONFIGURATION                                    *auto-hlsearch-configuration*
 
   remap_keys ~
-    Accepts a lua table with keys for which the |:AutoHlsearch| command would
-    be prepended.
+    Accepts a lua table with keys for which the
+    `require("auto-hlsearch").activate()` function would be prepended.
+    Type: `table`
+    Default: `{ "/", "?", "*", "#", "n", "N" }`
+
+  create_commands ~
+    Specify whether the plugin should create |user-commands|. All the features
+    would still be available via lua API functions.
+    Type: `boolean`
+    Default: `true`
 
 
 
