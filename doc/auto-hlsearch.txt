@@ -19,9 +19,6 @@ enables 'hlsearch' option and starts listening to |CursorMoved|, |InsertEnter|
 move is detected, the 'hlsearch' will be turned off with |:noh| command and
 listeners removed.
 
-The additional |vim.on_key()| subscription is required in order to detect keys
-that don't deactivate the plugin in |CursorMoved| |autocmd|.
-
 The plugin extends user's keybindings in order to call |:AutoHlsearch| command.
 
 ==============================================================================
@@ -37,7 +34,7 @@ table with the settings you want to override. The defaults are the following:
 >
 		       require("auto-hlsearch").setup({
 		         remap_keys = { "/", "?", "*", "#", "n", "N" },
-			 create_commands = true,
+		         create_commands = true,
 		       })
 <
 
