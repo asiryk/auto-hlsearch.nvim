@@ -41,9 +41,12 @@ The default configuration options:
 require("auto-hlsearch").setup({
   remap_keys = { "/", "?", "*", "#", "n", "N" },
   create_commands = true,
+  pre_hook = function() end,
+  post_hook = function() end,
 })
 ```
 
 The plugin introduces a user command `:AutoHlsearch` which would be prepended to the provided `remap_keys`.
+`pre_hook` and `post_hook` functions will activate before/after searching.
 
 For more information read [help](./doc/auto-hlsearch.txt) `:h auto-hlsearch.nvim`.

@@ -35,6 +35,8 @@ table with the settings you want to override. The defaults are the following:
 		       require("auto-hlsearch").setup({
 		         remap_keys = { "/", "?", "*", "#", "n", "N" },
 		         create_commands = true,
+		         pre_hook = function() end,
+		         post_hook = function() end,
 		       })
 <
 
@@ -86,6 +88,16 @@ CONFIGURATION                                    *auto-hlsearch-configuration*
     would still be available via lua API functions.
     Type: `boolean`
     Default: `true`
+
+  pre_hook ~
+    Accepts a lua function which will executed before searching.
+    Type: `function`
+    Default: `function() end`
+
+  post_hook ~
+    Accepts a lua function which will executed after searching.
+    Type: `function`
+    Default: `function() end`
 
 
 

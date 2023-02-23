@@ -3,6 +3,8 @@ local M = {}
 local defaults = {
   remap_keys = { "/", "?", "*", "#", "n", "N" },
   create_commands = true,
+  pre_hook = function() end,
+  post_hook = function() end,
 }
 
 -- Remap provided keys in order to use activate() function
@@ -28,7 +30,7 @@ local function remap_keys(keys)
 
         -- For vimscript function, not use expr options
       elseif keymap.rhs then
-          vim.keymap.set("n", lhs, function () M.activate() return keymap.rhs end, opts)
+        vim.keymap.set("n", lhs, function () M.activate() return keymap.rhs end, opts)
 
       end
 
@@ -67,12 +69,14 @@ local function init(config)
 
     vim.o.hlsearch = false
     clear_subscriptions()
+    config.post_hook()
   end
 
   local function activate()
     -- there is no need to activate :AutoHlsearch again
     -- if the subscriptions are still present
     if #autocmd_ids ~= 0 then return end
+    config.pre_hook()
     vim.o.hlsearch = true
 
     local last_key = nil
@@ -130,6 +134,12 @@ local function apply_user_config(user_config)
     end
     if type(user_config.create_commands) == "boolean" then
       config.create_commands = user_config.create_commands
+    end
+    if type(user_config.pre_hook) == "function" then
+      config.pre_hook = user_config.pre_hook
+    end
+    if type(user_config.post_hook) == "function" then
+      config.post_hook = user_config.post_hook
     end
   end
 
