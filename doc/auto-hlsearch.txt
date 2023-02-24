@@ -90,12 +90,12 @@ CONFIGURATION                                    *auto-hlsearch-configuration*
     Default: `true`
 
   pre_hook ~
-    Accepts a lua function which will executed before searching.
+    Accepts a lua function which will be executed before searching.
     Type: `function`
     Default: `function() end`
 
   post_hook ~
-    Accepts a lua function which will executed after searching.
+    Accepts a lua function which will be executed after searching.
     Type: `function`
     Default: `function() end`
 
