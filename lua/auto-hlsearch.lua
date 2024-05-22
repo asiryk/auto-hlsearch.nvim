@@ -125,11 +125,19 @@ local function init(config)
   return activate, enable_plugin, disable_plugin, toggle_plugin
 end
 
+local function isList(list)
+  if vim.version().minor == 11 then
+    return vim.islist(list)
+  else
+    return vim.tbl_islist(list)
+  end
+end
+
 local function apply_user_config(user_config)
   local config = vim.tbl_deep_extend("force", {}, defaults)
 
   if user_config then
-    if vim.tbl_islist(user_config.remap_keys) then
+    if isList(user_config.remap_keys) then
       config.remap_keys = user_config.remap_keys
     end
     if type(user_config.create_commands) == "boolean" then
