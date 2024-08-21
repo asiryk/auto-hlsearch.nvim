@@ -129,7 +129,7 @@ local function apply_user_config(user_config)
   local config = vim.tbl_deep_extend("force", {}, defaults)
 
   if user_config then
-    if vim.tbl_islist(user_config.remap_keys) then
+    if vim.islist(user_config.remap_keys) then
       config.remap_keys = user_config.remap_keys
     end
     if type(user_config.create_commands) == "boolean" then
